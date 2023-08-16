@@ -153,7 +153,7 @@ public class FacturaEntity implements Serializable {
             return null;
         }
         return new Factura(id, descripcion, observacion, fechaRegistro,
-                cliente.toDomainModel(), ItemFacturaEntity.fromListToDomainModel(items));
+                cliente.toDomainModelID(), ItemFacturaEntity.fromListToDomainModel(items));
     }
 
 

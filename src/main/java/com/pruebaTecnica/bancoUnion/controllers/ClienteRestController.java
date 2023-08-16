@@ -15,12 +15,15 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@CrossOrigin(origins = {"http://localhost:4200"})
+//@CrossOrigin(origins = {"http://localhost:4200"})
 @RestController
-@RequestMapping("/api")
 public class ClienteRestController {
 
-    private IClienteService clienteService;
+    private final IClienteService clienteService;
+
+    public ClienteRestController(IClienteService clienteService) {
+        this.clienteService = clienteService;
+    }
 
     private final Logger log = LoggerFactory.getLogger(ClienteRestController.class);
 

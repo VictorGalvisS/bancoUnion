@@ -140,6 +140,13 @@ public class ClienteEntity implements Serializable {
 		}};
 	}
 
+	public Cliente toDomainModelID() {
+		if (id == null || id <= 0L) {
+			return null;
+		}
+		return new Cliente(id, nombre, apellido, email, fechaRegistro, null);
+	}
+
 	public Cliente toDomainModel() {
 		if (id == null || id <= 0L) {
 			return null;
