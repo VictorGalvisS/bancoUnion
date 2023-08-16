@@ -1,9 +1,16 @@
 package com.pruebaTecnica.bancoUnion.web.validation;
 
+import com.pruebaTecnica.bancoUnion.controllers.ClienteRestController;
+import com.pruebaTecnica.bancoUnion.web.validation.dto.ValidationErrorDto;
+import com.pruebaTecnica.bancoUnion.web.validation.dto.ValidationErrorResponseDto;
 import com.pruebaTecnica.bancoUnion.web.validation.excepcion.ValidationDataException;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
 import jakarta.validation.UnexpectedTypeException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -15,21 +22,33 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
-import static com.pruebaTecnica.bancoUnion.web.validation.ValidationErrorDto.newInstanceValidationErrorDto;
+import java.util.Properties;
+import java.util.UUID;
 
+import static com.pruebaTecnica.bancoUnion.web.validation.dto.ValidationErrorDto.newInstanceValidationErrorDto;
+
+@Order(Ordered.HIGHEST_PRECEDENCE)
 @ControllerAdvice
 public class ErrorHandlingControllerAdvice {
+
+    protected static final Logger log = LoggerFactory.getLogger(ErrorHandlingControllerAdvice.class);
 
     @ExceptionHandler(ConstraintViolationException.class)
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     ValidationErrorResponseDto onConstraintValidationException(ConstraintViolationException e) {
+        String idFailure = UUID.randomUUID().toString();
+        Properties properties = new Properties();
+        properties.setProperty("idRequest", idFailure);
+        System.setProperties(properties);
+
         ValidationErrorResponseDto error = new ValidationErrorResponseDto();
         for (@SuppressWarnings("rawtypes")
         ConstraintViolation violation : e.getConstraintViolations()) {
-            error.getListValidationErrorDto().add(
-                    newInstanceValidationErrorDto(violation.getPropertyPath().toString(),
-                            violation.getMessage(), violation.getInvalidValue().toString()));
+            ValidationErrorDto dto = newInstanceValidationErrorDto(idFailure, violation.getPropertyPath().toString(),
+                    violation.getMessage(), violation.getInvalidValue().toString());
+            error.getListValidationErrorDto().add(dto);
+            log.error(violation.getMessage(), violation);
         }
         return error;
     }
@@ -38,11 +57,17 @@ public class ErrorHandlingControllerAdvice {
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     ValidationErrorResponseDto onMethodArgumentNotValidException(MethodArgumentNotValidException e) {
+        String idFailure = UUID.randomUUID().toString();
+        Properties properties = new Properties();
+        properties.setProperty("idRequest", idFailure);
+        System.setProperties(properties);
+
         ValidationErrorResponseDto error = new ValidationErrorResponseDto();
         for (FieldError fieldError : e.getBindingResult().getFieldErrors()) {
-            error.getListValidationErrorDto().add(
-                    newInstanceValidationErrorDto(fieldError.getField(),
-                            fieldError.getDefaultMessage(), fieldError.getRejectedValue().toString()));
+            ValidationErrorDto dto = newInstanceValidationErrorDto(idFailure,fieldError.getField(),
+                    fieldError.getDefaultMessage(), fieldError.getRejectedValue().toString());
+            error.getListValidationErrorDto().add(dto);
+            log.error(fieldError.getDefaultMessage(), fieldError);
         }
         return error;
     }
@@ -51,9 +76,15 @@ public class ErrorHandlingControllerAdvice {
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     ValidationErrorResponseDto onMissingServletRequestParameterException(MissingServletRequestParameterException e) {
+        String idFailure = UUID.randomUUID().toString();
+        Properties properties = new Properties();
+        properties.setProperty("idRequest", idFailure);
+        System.setProperties(properties);
+
         ValidationErrorResponseDto error = new ValidationErrorResponseDto();
-        error.getListValidationErrorDto().add(
-                newInstanceValidationErrorDto(e.getParameterName(), e.getMessage(), null));
+        ValidationErrorDto dto = newInstanceValidationErrorDto(idFailure,e.getParameterName(), e.getMessage(), null);
+        error.getListValidationErrorDto().add(dto);
+        log.error(e.getMessage(), e);
         return error;
     }
 
@@ -61,9 +92,15 @@ public class ErrorHandlingControllerAdvice {
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     ValidationErrorResponseDto onMissingRequestHeaderException(MissingRequestHeaderException e) {
+        String idFailure = UUID.randomUUID().toString();
+        Properties properties = new Properties();
+        properties.setProperty("idRequest", idFailure);
+        System.setProperties(properties);
+
         ValidationErrorResponseDto error = new ValidationErrorResponseDto();
-        error.getListValidationErrorDto().add(
-                newInstanceValidationErrorDto(e.getHeaderName(), e.getMessage(), null));
+        ValidationErrorDto dto = newInstanceValidationErrorDto(idFailure,e.getHeaderName(), e.getMessage(), null);
+        error.getListValidationErrorDto().add(dto);
+        log.error(e.getMessage(), e);
         return error;
     }
 
@@ -71,9 +108,15 @@ public class ErrorHandlingControllerAdvice {
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     ValidationErrorResponseDto onMethodArgumentTypeMismatchException(MethodArgumentTypeMismatchException e) {
+        String idFailure = UUID.randomUUID().toString();
+        Properties properties = new Properties();
+        properties.setProperty("idRequest", idFailure);
+        System.setProperties(properties);
+
         ValidationErrorResponseDto error = new ValidationErrorResponseDto();
-        error.getListValidationErrorDto()
-                .add(newInstanceValidationErrorDto(e.getName(), e.getMessage(), e.getValue().toString()));
+        ValidationErrorDto dto = newInstanceValidationErrorDto(idFailure,e.getName(), e.getMessage(), e.getValue().toString());
+        error.getListValidationErrorDto().add(dto);
+        log.error(e.getMessage(), e);
         return error;
     }
 
@@ -81,9 +124,15 @@ public class ErrorHandlingControllerAdvice {
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     ValidationErrorResponseDto onNullPointerException(NullPointerException e) {
+        String idFailure = UUID.randomUUID().toString();
+        Properties properties = new Properties();
+        properties.setProperty("idRequest", idFailure);
+        System.setProperties(properties);
+
         ValidationErrorResponseDto error = new ValidationErrorResponseDto();
-        error.getListValidationErrorDto().add(
-                newInstanceValidationErrorDto(null, e.getMessage(), null));
+        ValidationErrorDto dto = newInstanceValidationErrorDto(idFailure,null, e.getMessage(), null);
+        error.getListValidationErrorDto().add(dto);
+        log.error(e.getMessage(), e);
         return error;
     }
 
@@ -91,9 +140,15 @@ public class ErrorHandlingControllerAdvice {
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     ValidationErrorResponseDto onUnexpectedTypeException(UnexpectedTypeException e) {
+        String idFailure = UUID.randomUUID().toString();
+        Properties properties = new Properties();
+        properties.setProperty("idRequest", idFailure);
+        System.setProperties(properties);
+
         ValidationErrorResponseDto error = new ValidationErrorResponseDto();
-        error.getListValidationErrorDto().add(
-                newInstanceValidationErrorDto(null, e.getMessage(), null));
+        ValidationErrorDto dto = newInstanceValidationErrorDto(idFailure,null, e.getMessage(), null);
+        error.getListValidationErrorDto().add(dto);
+        log.error(e.getMessage(), e);
         return error;
     }
 
@@ -101,9 +156,31 @@ public class ErrorHandlingControllerAdvice {
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     ValidationErrorResponseDto onDateExceptionError(ValidationDataException e) {
+        String idFailure = UUID.randomUUID().toString();
+        Properties properties = new Properties();
+        properties.setProperty("idRequest", idFailure);
+        System.setProperties(properties);
+
         ValidationErrorResponseDto error = new ValidationErrorResponseDto();
-        error.getListValidationErrorDto().add(
-                newInstanceValidationErrorDto(null, e.getMessage(), null));
+        ValidationErrorDto dto = newInstanceValidationErrorDto(idFailure,null, e.getMessage(), null);
+        error.getListValidationErrorDto().add(dto);
+        log.error(e.getMessage(), e);
+        return error;
+    }
+
+    @ExceptionHandler(Exception.class)
+    @ResponseStatus(HttpStatus.OK)
+    @ResponseBody
+    ValidationErrorResponseDto exceptionHandler(Exception e) {
+        String idFailure = UUID.randomUUID().toString();
+        Properties properties = new Properties();
+        properties.setProperty("idRequest", idFailure);
+        System.setProperties(properties);
+
+        ValidationErrorResponseDto error = new ValidationErrorResponseDto();
+        ValidationErrorDto dto = newInstanceValidationErrorDto(idFailure,null, e.getMessage(), null);
+        error.getListValidationErrorDto().add(dto);
+        log.error(e.getMessage(), e);
         return error;
     }
 

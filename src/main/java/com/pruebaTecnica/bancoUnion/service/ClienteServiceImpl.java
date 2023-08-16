@@ -1,8 +1,11 @@
 package com.pruebaTecnica.bancoUnion.service;
 
 import com.pruebaTecnica.bancoUnion.models.dto.Cliente;
+import com.pruebaTecnica.bancoUnion.models.dto.Factura;
 import com.pruebaTecnica.bancoUnion.models.entity.ClienteEntity;
+import com.pruebaTecnica.bancoUnion.models.entity.FacturaEntity;
 import com.pruebaTecnica.bancoUnion.repository.IClienteRepository;
+import com.pruebaTecnica.bancoUnion.repository.IFacturaRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -17,9 +20,11 @@ import java.util.Optional;
 public class ClienteServiceImpl implements IClienteService {
 
     private final IClienteRepository iSearchEventRepository;
+    private final IFacturaRepository iFacturaRepository;
 
-    public ClienteServiceImpl(IClienteRepository iSearchEventRepository) {
+    public ClienteServiceImpl(IClienteRepository iSearchEventRepository, IFacturaRepository iFacturaRepository) {
         this.iSearchEventRepository = iSearchEventRepository;
+        this.iFacturaRepository = iFacturaRepository;
     }
 
     @Override
@@ -74,5 +79,19 @@ public class ClienteServiceImpl implements IClienteService {
             return true;
         }
         return false;
+    }
+
+    @Override
+    public Factura findFacturaById(Long id) {
+         FacturaEntity facturaEntity = iFacturaRepository.findById(id).orElse(null);
+         if(facturaEntity != null) {
+             return facturaEntity.toDomainModel();
+         }
+        return null;
+    }
+
+    @Override
+    public void deleteFacturaById(Long id) {
+
     }
 }

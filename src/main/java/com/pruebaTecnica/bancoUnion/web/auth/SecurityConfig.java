@@ -15,17 +15,19 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http
-                .csrf().disable()
+        http.authorizeHttpRequests().anyRequest().permitAll();
+        return http.build();
+    }
+
+    /*
+    .csrf().disable()
                 .authorizeHttpRequests()
                 .anyRequest()
                 .authenticated()
                 .and()
                 .httpBasic()
                 .and().cors().configurationSource(corsConfigurationSource());
-        return http.build();
-    }
-
+    * */
 
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {

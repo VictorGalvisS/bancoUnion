@@ -1,6 +1,7 @@
 package com.pruebaTecnica.bancoUnion.controllers;
 
 import com.pruebaTecnica.bancoUnion.models.dto.Cliente;
+import com.pruebaTecnica.bancoUnion.models.dto.Factura;
 import com.pruebaTecnica.bancoUnion.service.IClienteService;
 import com.pruebaTecnica.bancoUnion.web.validation.excepcion.ValidationDataException;
 import jakarta.validation.Valid;
@@ -9,14 +10,16 @@ import jakarta.validation.constraints.Min;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataAccessException;
+import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
-//@CrossOrigin(origins = {"http://localhost:4200"})
+@CrossOrigin(origins = {"http://localhost:4200"})
 @RestController
+@RequestMapping("/api")
 public class ClienteRestController {
 
     private final IClienteService clienteService;
@@ -33,11 +36,19 @@ public class ClienteRestController {
     }
 
     @GetMapping("/clientes/page/{page}")
-    public List<Cliente> index(@PathVariable Integer page) {
+    public List<Cliente> index(@PathVariable @Min(1) @Max(999999999) Integer page) throws ValidationDataException {
+        if(page == null || page <=0L) {
+            log.error("Numero de pagina no valido");
+            throw new ValidationDataException("Numero de pagina no valido");
+        }
         return clienteService.findAll(page);
     }
     @GetMapping("/clientes/{id}")
     public Cliente show(@PathVariable @Min(1) @Max(999999999) Long id) throws DataAccessException, ValidationDataException {
+        if(id == null || id <=0L) {
+            log.error("Identificador no valido");
+            throw new ValidationDataException("Identificador no valido");
+        }
         Cliente cliente = null;
         try {
             cliente = clienteService.findCliente(id);
@@ -75,6 +86,10 @@ public class ClienteRestController {
     }
     @PutMapping("/clientes/{id}")
     public Cliente update(@Valid @RequestBody Cliente cliente, BindingResult result, @PathVariable @Min(1) @Max(999999999) Long id) throws DataAccessException, ValidationDataException {
+        if(id == null || id <=0L) {
+            log.error("Identificador no valido");
+            throw new ValidationDataException("Identificador no valido");
+        }
         Cliente clienteActual = clienteService.findCliente(id);
         Cliente clienteUpdated = null;
         if (result.hasErrors()) {
@@ -115,5 +130,17 @@ public class ClienteRestController {
             throw new ValidationDataException(msg, e);
         }
         return eliminadoExitoso;
+    }
+
+    @GetMapping("/facturas/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public Factura findFacturaById(@PathVariable Long id) {
+        return clienteService.findFacturaById(id);
+    }
+
+    @DeleteMapping("/facturas/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteFacturaById(@PathVariable Long id) {
+        clienteService.deleteFacturaById(id);
     }
 }
