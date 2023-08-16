@@ -1,14 +1,10 @@
 package com.pruebaTecnica.bancoUnion.models.entity;
 
-import com.pruebaTecnica.bancoUnion.models.dto.Cliente;
-import com.pruebaTecnica.bancoUnion.models.dto.Factura;
 import com.pruebaTecnica.bancoUnion.models.dto.Producto;
 import jakarta.persistence.*;
 
-
 import java.io.Serializable;
 import java.util.Date;
-import java.util.List;
 
 @Entity
 @Table(name = "productos")

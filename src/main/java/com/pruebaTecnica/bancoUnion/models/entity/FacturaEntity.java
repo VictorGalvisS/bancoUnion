@@ -1,10 +1,7 @@
 package com.pruebaTecnica.bancoUnion.models.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.pruebaTecnica.bancoUnion.models.dto.Cliente;
 import com.pruebaTecnica.bancoUnion.models.dto.Factura;
-import com.pruebaTecnica.bancoUnion.models.dto.ItemFactura;
-import io.micrometer.common.util.StringUtils;
 import jakarta.persistence.*;
 
 
