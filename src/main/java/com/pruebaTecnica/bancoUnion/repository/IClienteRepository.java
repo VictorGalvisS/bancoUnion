@@ -1,4 +1,4 @@
-package com.pruebaTecnica.bancoUnion.models.repository;
+package com.pruebaTecnica.bancoUnion.repository;
 
 import com.pruebaTecnica.bancoUnion.models.entity.ClienteEntity;
 import org.springframework.data.jpa.repository.JpaRepository;

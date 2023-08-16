@@ -28,6 +28,9 @@ public class ItemFacturaEntity implements Serializable {
     @JoinColumn(name = "producto_id")
     private ProductoEntity producto;
 
+    public ItemFacturaEntity() {
+    }
+
     public ItemFacturaEntity(Long id, Integer cantidad, ProductoEntity producto) {
         this.id = id;
         this.cantidad = cantidad;

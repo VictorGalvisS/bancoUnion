@@ -25,8 +25,8 @@ public class FacturaEntity implements Serializable {
 
     private String observacion;
 
-    @Column(name = "create_at")
-    @Temporal(TemporalType.DATE)
+    @Column(name = "fecha_registro")
+    @Temporal(TemporalType.TIMESTAMP)
     private Date fechaRegistro;
 
     @JsonIgnoreProperties(value = {"facturas", "hibernateLazyInitializer", "handler"}, allowSetters = true)

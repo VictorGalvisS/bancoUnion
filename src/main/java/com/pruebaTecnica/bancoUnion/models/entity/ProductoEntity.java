@@ -23,9 +23,12 @@ public class ProductoEntity implements Serializable {
     private String nombre;
     private Double precio;
 
-    @Column(name = "create_at")
+    @Column(name = "fecha_registro")
     @Temporal(TemporalType.TIMESTAMP)
     private Date fechaRegistro;
+
+    public ProductoEntity() {
+    }
 
     @PrePersist
     public void prePersist() {

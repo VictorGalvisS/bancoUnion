@@ -2,15 +2,13 @@ package com.pruebaTecnica.bancoUnion.service;
 
 import com.pruebaTecnica.bancoUnion.models.dto.Cliente;
 import com.pruebaTecnica.bancoUnion.models.entity.ClienteEntity;
-import com.pruebaTecnica.bancoUnion.models.repository.IClienteRepository;
+import com.pruebaTecnica.bancoUnion.repository.IClienteRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
-import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
