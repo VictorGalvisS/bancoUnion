@@ -1,4 +1,4 @@
-package com.pruebaTecnica.bancoUnion.bancoUnion;
+package com.pruebaTecnica.bancoUnion;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
