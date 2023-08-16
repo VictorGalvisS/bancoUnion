@@ -133,5 +133,21 @@ public class UserEntity implements Serializable {
     public void setRoles(List<RoleEntity> roles) {
         this.roles = roles;
     }
+
+    @Override
+    public String toString() {
+        return "UserEntity{" +
+                "id=" + id +
+                ", username='" + username + '\'' +
+                ", nombre='" + nombre + '\'' +
+                ", apellido='" + apellido + '\'' +
+                ", password='" + password + '\'' +
+                ", email='" + email + '\'' +
+                ", locked=" + locked +
+                ", disabled=" + disabled +
+                ", fechaRegistro=" + fechaRegistro +
+                ", roles=" + roles +
+                '}';
+    }
 }
 

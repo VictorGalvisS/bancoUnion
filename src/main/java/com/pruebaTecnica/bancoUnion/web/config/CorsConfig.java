@@ -1,4 +1,4 @@
-package com.pruebaTecnica.bancoUnion.web.auth;
+package com.pruebaTecnica.bancoUnion.web.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

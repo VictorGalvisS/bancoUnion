@@ -13,6 +13,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -29,14 +30,39 @@ public class UserSecurityService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         UserEntity userEntity = iUserRepository.findByUsername(username);
+        System.out.println(userEntity.toString());
+        List<GrantedAuthority> authorities = userEntity.getRoles()
+                .stream()
+                .map(role -> new SimpleGrantedAuthority(role.getNombre()))
+                .peek(authority -> logger.info("Role: " + authority.getAuthority()))
+                .collect(Collectors.toList());
 
         String[] roles = userEntity.getRoles().stream().map(roleEntity -> roleEntity.getNombre()).toArray(String[]::new);
         return User.builder()
                 .username(userEntity.getUsername())
                 .password(userEntity.getPassword())
-                .roles(roles)
+                .authorities(this.grantedAuthorities(roles))
                 .accountLocked(userEntity.getLocked())
                 .disabled(userEntity.getDisabled())
                 .build();
+    }
+
+    private String[] getAuthorities(String role) {
+        if ("ADMIN".equalsIgnoreCase(role) || "OTHER".equalsIgnoreCase(role)) {
+            return new String[]{"random_order"};
+        }
+        return new String[]{};
+    }
+
+    private List<GrantedAuthority> grantedAuthorities(String[] roles) {
+        List<GrantedAuthority> authorities = new ArrayList<>(roles.length);
+        for (String role : roles) {
+            authorities.add(new SimpleGrantedAuthority("ROLE_" + role));
+
+            for (String authority: this.getAuthorities(role)) {
+                authorities.add(new SimpleGrantedAuthority(authority));
+            }
+        }
+        return authorities;
     }
 }
