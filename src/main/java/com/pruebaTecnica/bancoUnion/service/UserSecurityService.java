@@ -1,7 +1,6 @@
 package com.pruebaTecnica.bancoUnion.service;
 
 import com.pruebaTecnica.bancoUnion.models.entity.UserEntity;
-import com.pruebaTecnica.bancoUnion.models.entity.RoleEntity;
 import com.pruebaTecnica.bancoUnion.repository.IUserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

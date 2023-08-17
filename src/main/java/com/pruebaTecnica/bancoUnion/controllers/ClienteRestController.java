@@ -11,9 +11,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -29,6 +31,10 @@ public class ClienteRestController {
 
     private final Logger log = LoggerFactory.getLogger(ClienteRestController.class);
 
+    @GetMapping(value = "/alive")
+    public ResponseEntity<String> getVersion() {
+        return ResponseEntity.ok(new Date() + " - " + "1.0.0");
+    }
     @GetMapping("/clientes")
     public List<Cliente> index() {
         return clienteService.findAll();
