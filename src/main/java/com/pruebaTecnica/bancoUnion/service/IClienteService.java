@@ -2,9 +2,11 @@ package com.pruebaTecnica.bancoUnion.service;
 
 import com.pruebaTecnica.bancoUnion.models.dto.Cliente;
 import com.pruebaTecnica.bancoUnion.models.dto.Factura;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service
 public interface IClienteService {
 
 

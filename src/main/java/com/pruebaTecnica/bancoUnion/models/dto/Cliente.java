@@ -3,6 +3,7 @@ package com.pruebaTecnica.bancoUnion.models.dto;
 import com.pruebaTecnica.bancoUnion.models.entities.ClienteEntity;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
 
@@ -31,6 +32,7 @@ public class Cliente implements Serializable {
 	private final String apellido;
 
 	@NotEmpty(message ="no puede estar vacio")
+	@Email(message="no es una dirección de correo bien formada")
 	@Parameter(required=true)
 	private final String email;
 
@@ -104,12 +106,16 @@ public class Cliente implements Serializable {
 		if (cliente == null ) {
 			return null;
 		}
+		Date fecharegistro = null;
+		if(cliente.getFechaRegistro() == null) {
+			fecharegistro = new Date();
+		}
 		return new Cliente(
 				clienteActual.getId(),
 				cliente.getNombre(),
 				cliente.getApellido(),
 				cliente.getEmail(),
-				cliente.getFechaRegistro(),
+				fecharegistro,
 				clienteActual.getFacturas()
 				);
 	}

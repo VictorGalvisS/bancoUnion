@@ -125,12 +125,17 @@ public class ClienteEntity implements Serializable {
 			listFacturas = FacturaEntity.fromListDomainModel(cliente.getFacturas());
 		}
 
+		Date fecharegistro = null;
+		if(cliente.getFechaRegistro() == null) {
+			fecharegistro = new Date();
+		}
+
 		return new ClienteEntity(
 				cliente.getId(),
 				cliente.getNombre(),
 				cliente.getApellido(),
 				cliente.getEmail(),
-				cliente.getFechaRegistro(),
+				fecharegistro,
 				listFacturas
 		);
 	}

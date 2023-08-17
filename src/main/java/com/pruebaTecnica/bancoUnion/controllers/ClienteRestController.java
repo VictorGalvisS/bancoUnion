@@ -24,6 +24,7 @@ import java.util.stream.Collectors;
 @RequestMapping("/api")
 @SecurityRequirement(name = "bearer-key")
 public class ClienteRestController {
+    private static final Logger logger = LoggerFactory.getLogger(ClienteRestController.class);
 
     private final IClienteService clienteService;
 
@@ -35,16 +36,19 @@ public class ClienteRestController {
 
     @GetMapping(value = "/alive")
     public ResponseEntity<String> getVersion() {
+        log.info("*********** called.. /alive");
         return ResponseEntity.ok(new Date() + " - " + "1.0.0");
     }
 
     @GetMapping("/obtenerTodosClientes")
     public List<Cliente> index() {
+        log.info("*********** called.. /obtenerTodosClientes");
         return clienteService.findAll();
     }
 
     @GetMapping("/obtenerClientes/page/{page}")
     public List<Cliente> index(@PathVariable @Min(1) @Max(999999999) Integer page) throws ValidationDataException {
+        log.info("*********** called.. /obtenerClientes/page/{page}");
         if (page == null || page <= 0L) {
             log.error("Numero de pagina no valido");
             throw new ValidationDataException("Numero de pagina no valido");
