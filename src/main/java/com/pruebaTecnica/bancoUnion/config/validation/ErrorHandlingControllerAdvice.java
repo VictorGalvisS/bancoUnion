@@ -1,9 +1,8 @@
-package com.pruebaTecnica.bancoUnion.web.validation;
+package com.pruebaTecnica.bancoUnion.config.validation;
 
-import com.pruebaTecnica.bancoUnion.controllers.ClienteRestController;
-import com.pruebaTecnica.bancoUnion.web.validation.dto.ValidationErrorDto;
-import com.pruebaTecnica.bancoUnion.web.validation.dto.ValidationErrorResponseDto;
-import com.pruebaTecnica.bancoUnion.web.validation.excepcion.ValidationDataException;
+import com.pruebaTecnica.bancoUnion.config.validation.dto.ValidationErrorDto;
+import com.pruebaTecnica.bancoUnion.config.validation.dto.ValidationErrorResponseDto;
+import com.pruebaTecnica.bancoUnion.config.validation.excepcion.ValidationDataException;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
 import jakarta.validation.UnexpectedTypeException;
@@ -25,7 +24,7 @@ import org.springframework.web.method.annotation.MethodArgumentTypeMismatchExcep
 import java.util.Properties;
 import java.util.UUID;
 
-import static com.pruebaTecnica.bancoUnion.web.validation.dto.ValidationErrorDto.newInstanceValidationErrorDto;
+import static com.pruebaTecnica.bancoUnion.config.validation.dto.ValidationErrorDto.newInstanceValidationErrorDto;
 
 @Order(Ordered.HIGHEST_PRECEDENCE)
 @ControllerAdvice

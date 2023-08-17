@@ -1,10 +1,13 @@
 package com.pruebaTecnica.bancoUnion.models.dto;
 
+import com.pruebaTecnica.bancoUnion.models.entities.ClienteEntity;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -14,23 +17,29 @@ public class Cliente implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 
+	@Schema(accessMode = Schema.AccessMode.READ_ONLY)
+	@Parameter(required=true)
 	private final Long id;
 
 	@NotEmpty(message ="no puede estar vacio")
 	@Size(min=4, max=12, message="el tamaño tiene que estar entre 4 y 12")
+	@Parameter(required=true)
 	private final String nombre;
 
 	@NotEmpty(message ="no puede estar vacio")
+	@Parameter(required=true)
 	private final String apellido;
 
-
 	@NotEmpty(message ="no puede estar vacio")
+	@Parameter(required=true)
 	private final String email;
 
-	@Pattern(regexp = "^([0-2][0-9]|(3)[0-1])(\\/)(((0)[0-9])|((1)[0-2]))(\\/)\\d{4}$", message = "El formato de fecha debe ser dd/MM/yyyy")
+	@Parameter(required=false)
 	private final Date fechaRegistro;
 
-	@Size(min = 1, message = "Debe ingresar una o mas edades")
+
+	@Parameter(required=false)
+	@Schema(accessMode = Schema.AccessMode.READ_ONLY)
 	private final List<Factura> facturas;
 
 	public Cliente(Long id, String nombre, String apellido, String email, Date fechaRegistro, List<Factura> facturas) {
@@ -75,6 +84,19 @@ public class Cliente implements Serializable {
 				", createAt=" + fechaRegistro +
 				", facturas=" + facturas +
 				'}';
+	}
+
+	public static List<Cliente> fromListToDomainModel(List<ClienteEntity> listClientesEntity) {
+		if(listClientesEntity == null || listClientesEntity.isEmpty()) {
+			return new ArrayList<>();
+		}
+		return new ArrayList<Cliente>() {{
+			for (ClienteEntity fc : listClientesEntity) {
+				if(fc != null) {
+					this.add(fc.toDomainModel());
+				}
+			}
+		}};
 	}
 
 	public static Cliente newInstanceClienteUpdate(Cliente clienteActual, Cliente cliente) {

@@ -1,4 +1,4 @@
-package com.pruebaTecnica.bancoUnion.web.config;
+package com.pruebaTecnica.bancoUnion.config.securityConfig;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;

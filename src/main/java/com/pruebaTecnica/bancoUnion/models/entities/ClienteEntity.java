@@ -1,14 +1,16 @@
-package com.pruebaTecnica.bancoUnion.models.entity;
+package com.pruebaTecnica.bancoUnion.models.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.pruebaTecnica.bancoUnion.models.dto.Cliente;
 import com.pruebaTecnica.bancoUnion.models.dto.Factura;
 import jakarta.persistence.*;
+import org.hibernate.proxy.HibernateProxy;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Table(name="clientes")
@@ -44,6 +46,11 @@ public class ClienteEntity implements Serializable {
 		this.email = email;
 		this.fechaRegistro = fechaRegistro;
 		this.facturas = facturas;
+	}
+
+	@PrePersist
+	public void prePersist() {
+		this.fechaRegistro = new Date();
 	}
 
 	public ClienteEntity(Long id) {
@@ -113,27 +120,36 @@ public class ClienteEntity implements Serializable {
 		if (cliente == null) {
 			return null;
 		}
+		List<FacturaEntity> listFacturas = new ArrayList<>();
+		if(cliente.getFacturas() != null && !cliente.getFacturas().isEmpty()) {
+			listFacturas = FacturaEntity.fromListDomainModel(cliente.getFacturas());
+		}
+
 		return new ClienteEntity(
 				cliente.getId(),
 				cliente.getNombre(),
 				cliente.getApellido(),
 				cliente.getEmail(),
 				cliente.getFechaRegistro(),
-				FacturaEntity.fromListDomainModel(cliente.getFacturas())
+				listFacturas
 		);
 	}
 
-	public static List<Cliente> fromListToDomainModel(List<ClienteEntity> listClientesEntity) {
-		if(listClientesEntity == null || listClientesEntity.isEmpty()) {
-			return new ArrayList<>();
-		}
-		return new ArrayList<Cliente>() {{
-			for (ClienteEntity fc : listClientesEntity) {
-				if(fc != null) {
-					this.add(fc.toDomainModel());
-				}
-			}
-		}};
+
+	@Override
+	public final boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null) return false;
+		Class<?> oEffectiveClass = o instanceof HibernateProxy ? ((HibernateProxy) o).getHibernateLazyInitializer().getPersistentClass() : o.getClass();
+		Class<?> thisEffectiveClass = this instanceof HibernateProxy ? ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass() : this.getClass();
+		if (thisEffectiveClass != oEffectiveClass) return false;
+		ClienteEntity that = (ClienteEntity) o;
+		return getId() != null && Objects.equals(getId(), that.getId());
+	}
+
+	@Override
+	public final int hashCode() {
+		return getClass().hashCode();
 	}
 
 	public Cliente toDomainModelID() {
@@ -147,7 +163,7 @@ public class ClienteEntity implements Serializable {
 		if (id == null || id <= 0L) {
 			return null;
 		}
-		List<Factura> listFacturas = FacturaEntity.fromListToDomainModel(facturas);
+		List<Factura> listFacturas = Factura.fromListToDomainModel(facturas);
 		return new Cliente(id, nombre, apellido, email, fechaRegistro, listFacturas);
 	}
 

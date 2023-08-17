@@ -1,6 +1,5 @@
-package com.pruebaTecnica.bancoUnion.web.config;
+package com.pruebaTecnica.bancoUnion.config.securityConfig;
 
-import io.micrometer.common.util.StringUtils;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -53,7 +52,6 @@ public class JwtFilter extends OncePerRequestFilter {
                 );
         authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
         SecurityContextHolder.getContext().setAuthentication(authenticationToken);
-        System.out.println(authenticationToken);
         filterChain.doFilter(request, response);
     }
 }

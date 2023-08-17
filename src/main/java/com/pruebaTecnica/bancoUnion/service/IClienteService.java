@@ -8,11 +8,15 @@ import java.util.List;
 public interface IClienteService {
 
 
+    boolean isPresenteIdCliente(Long idCliente);
+
     List<Cliente> findAll(Integer page);
 
     List<Cliente> findAll();
 
     Cliente save(Cliente cliente);
+
+    void saveFactura(Factura factura, Long idCliente);
 
     Cliente findCliente(Long id);
 
@@ -20,5 +24,5 @@ public interface IClienteService {
 
     Factura findFacturaById(Long id);
 
-    void deleteFacturaById(Long id);
+    boolean deleteFacturaById(Long id);
 }

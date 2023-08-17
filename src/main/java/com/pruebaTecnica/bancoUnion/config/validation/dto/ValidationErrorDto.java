@@ -1,4 +1,4 @@
-package com.pruebaTecnica.bancoUnion.web.validation.dto;
+package com.pruebaTecnica.bancoUnion.config.validation.dto;
 
 public final class ValidationErrorDto {
 
@@ -7,6 +7,9 @@ public final class ValidationErrorDto {
 	private final String mensaje;
 	private final String valor;
 
+	public String getId() {
+		return id;
+	}
 	public String getCampo() {
 		return campo;
 	}

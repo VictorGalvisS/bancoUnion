@@ -1,9 +1,9 @@
-package com.pruebaTecnica.bancoUnion.models.entity;
+package com.pruebaTecnica.bancoUnion.models.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.pruebaTecnica.bancoUnion.models.dto.Factura;
+import com.pruebaTecnica.bancoUnion.models.dto.ItemFactura;
 import jakarta.persistence.*;
-
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -44,6 +44,7 @@ public class FacturaEntity implements Serializable {
         this.cliente = cliente;
         this.items = items;
     }
+
 
     public FacturaEntity() {
         items = new ArrayList<>();
@@ -120,6 +121,22 @@ public class FacturaEntity implements Serializable {
         }};
     }
 
+    public static FacturaEntity fromDomainModelWithIdCliente(Factura factura, Long idCliente) {
+        if (factura == null || idCliente == null || idCliente <= 0L) {
+            return null;
+        }
+        ClienteEntity clienteEntity = new ClienteEntity(idCliente);
+
+        return new FacturaEntity(
+                factura.getId(),
+                factura.getDescripcion(),
+                factura.getObservacion(),
+                factura.getFechaRegistro(),
+                clienteEntity,
+                ItemFacturaEntity.fromListDomainModel(factura.getItems())
+        );
+    }
+
     public static FacturaEntity fromDomainModel(Factura factura) {
         if (factura == null) {
             return null;
@@ -134,23 +151,12 @@ public class FacturaEntity implements Serializable {
                 );
     }
 
-
-    public static List<Factura> fromListToDomainModel(List<FacturaEntity> listFacturas) {
-        return new ArrayList<Factura>() {{
-            for (FacturaEntity fc : listFacturas) {
-                if(fc != null) {
-                    this.add(fc.toDomainModel());
-                }
-            }
-        }};
-    }
-
     public Factura toDomainModel() {
         if (id == null || id <= 0L) {
             return null;
         }
         return new Factura(id, descripcion, observacion, fechaRegistro,
-                cliente.toDomainModelID(), ItemFacturaEntity.fromListToDomainModel(items));
+                cliente.toDomainModelID(), ItemFactura.fromListToDomainModel(items));
     }
 
 

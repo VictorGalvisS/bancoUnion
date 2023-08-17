@@ -1,4 +1,4 @@
-package com.pruebaTecnica.bancoUnion.web.validation.excepcion;
+package com.pruebaTecnica.bancoUnion.config.validation.excepcion;
 
 public class ValidationDataException extends Exception {
 

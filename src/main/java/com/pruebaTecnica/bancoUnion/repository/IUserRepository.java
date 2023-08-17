@@ -1,8 +1,7 @@
 package com.pruebaTecnica.bancoUnion.repository;
 
-import com.pruebaTecnica.bancoUnion.models.entity.UserEntity;
+import com.pruebaTecnica.bancoUnion.models.entities.UserEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 @Repository

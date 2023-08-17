@@ -1,4 +1,4 @@
-package com.pruebaTecnica.bancoUnion.models.entity;
+package com.pruebaTecnica.bancoUnion.models.entities;
 
 import jakarta.persistence.*;
 

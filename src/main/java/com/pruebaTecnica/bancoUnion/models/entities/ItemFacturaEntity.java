@@ -1,4 +1,4 @@
-package com.pruebaTecnica.bancoUnion.models.entity;
+package com.pruebaTecnica.bancoUnion.models.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.pruebaTecnica.bancoUnion.models.dto.ItemFactura;
@@ -82,16 +82,6 @@ public class ItemFacturaEntity implements Serializable {
                 itemFactura.getCantidad(),
                 ProductoEntity.fromDomainModel(itemFactura.getProducto())
                 );
-    }
-
-    public static List<ItemFactura> fromListToDomainModel(List<ItemFacturaEntity> listItemFacturas) {
-        return new ArrayList<ItemFactura>() {{
-            for (ItemFacturaEntity fc : listItemFacturas) {
-                if(fc != null) {
-                    this.add(fc.toDomainModel());
-                }
-            }
-        }};
     }
 
     public ItemFactura toDomainModel() {

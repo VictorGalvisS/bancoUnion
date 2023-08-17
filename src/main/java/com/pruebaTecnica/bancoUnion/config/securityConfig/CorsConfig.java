@@ -1,4 +1,4 @@
-package com.pruebaTecnica.bancoUnion.web.config;
+package com.pruebaTecnica.bancoUnion.config.securityConfig;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

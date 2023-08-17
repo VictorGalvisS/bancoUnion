@@ -3,7 +3,8 @@ package com.pruebaTecnica.bancoUnion.controllers;
 import com.pruebaTecnica.bancoUnion.models.dto.Cliente;
 import com.pruebaTecnica.bancoUnion.models.dto.Factura;
 import com.pruebaTecnica.bancoUnion.service.IClienteService;
-import com.pruebaTecnica.bancoUnion.web.validation.excepcion.ValidationDataException;
+import com.pruebaTecnica.bancoUnion.config.validation.excepcion.ValidationDataException;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
@@ -21,6 +22,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api")
+@SecurityRequirement(name = "bearer-key")
 public class ClienteRestController {
 
     private final IClienteService clienteService;
@@ -35,22 +37,24 @@ public class ClienteRestController {
     public ResponseEntity<String> getVersion() {
         return ResponseEntity.ok(new Date() + " - " + "1.0.0");
     }
-    @GetMapping("/clientes")
+
+    @GetMapping("/obtenerTodosClientes")
     public List<Cliente> index() {
         return clienteService.findAll();
     }
 
-    @GetMapping("/clientes/page/{page}")
+    @GetMapping("/obtenerClientes/page/{page}")
     public List<Cliente> index(@PathVariable @Min(1) @Max(999999999) Integer page) throws ValidationDataException {
-        if(page == null || page <=0L) {
+        if (page == null || page <= 0L) {
             log.error("Numero de pagina no valido");
             throw new ValidationDataException("Numero de pagina no valido");
         }
         return clienteService.findAll(page);
     }
-    @GetMapping("/clientes/{id}")
+
+    @GetMapping("/consultarCliente/{id}")
     public Cliente show(@PathVariable @Min(1) @Max(999999999) Long id) throws DataAccessException, ValidationDataException {
-        if(id == null || id <=0L) {
+        if (id == null || id <= 0L) {
             log.error("Identificador no valido");
             throw new ValidationDataException("Identificador no valido");
         }
@@ -68,7 +72,8 @@ public class ClienteRestController {
         }
         return cliente;
     }
-    @PostMapping("/clientes")
+
+    @PostMapping("/crearCliente")
     public Cliente create(@Valid @RequestBody Cliente cliente, BindingResult result) throws DataAccessException, ValidationDataException {
         Cliente clienteNew = null;
         if (result.hasErrors()) {
@@ -89,9 +94,10 @@ public class ClienteRestController {
 
         return clienteNew;
     }
-    @PutMapping("/clientes/{id}")
+
+    @PutMapping("/actualizarCliente/{id}")
     public Cliente update(@Valid @RequestBody Cliente cliente, BindingResult result, @PathVariable @Min(1) @Max(999999999) Long id) throws DataAccessException, ValidationDataException {
-        if(id == null || id <=0L) {
+        if (id == null || id <= 0L) {
             log.error("Identificador no valido");
             throw new ValidationDataException("Identificador no valido");
         }
@@ -114,7 +120,7 @@ public class ClienteRestController {
 
         try {
             clienteActual = Cliente.newInstanceClienteUpdate(clienteActual, cliente);
-            if(clienteActual != null) {
+            if (clienteActual != null) {
                 clienteUpdated = clienteService.save(clienteActual);
             }
 
@@ -124,6 +130,7 @@ public class ClienteRestController {
         }
         return clienteUpdated;
     }
+
     @DeleteMapping("/clientes/{id}")
     public boolean delete(@PathVariable @Min(1) @Max(999999999) Long id) throws DataAccessException, ValidationDataException {
         boolean eliminadoExitoso = false;
@@ -135,6 +142,32 @@ public class ClienteRestController {
             throw new ValidationDataException(msg, e);
         }
         return eliminadoExitoso;
+    }
+
+    @PostMapping("/crearFactura/cliente/{id}")
+    public void crearFactura(@PathVariable @Min(1) @Max(999999999) Long id,
+                                @Valid @RequestBody Factura factura, BindingResult result) throws DataAccessException, ValidationDataException {
+        if (result.hasErrors()) {
+            List<String> errors = result.getFieldErrors()
+                    .stream()
+                    .map(err -> "El campo '" + err.getField() + "' " + err.getDefaultMessage())
+                    .collect(Collectors.toList());
+            String commaSeparatedString = String.join(" , ", errors);
+            throw new ValidationDataException(commaSeparatedString);
+        }
+
+        boolean existeCliente = clienteService.isPresenteIdCliente(id);
+        if (!existeCliente) {
+            String msg = "Error al consultar el cliente con el id_cliente: " + id + ", No existe por favor revisar";
+            throw new ValidationDataException(msg);
+        }
+
+        try {
+            clienteService.saveFactura(factura, id);
+        } catch (DataAccessException e) {
+            String msg = "Error al realizar el insert en la base de datos una factura asociada a el id_cliente: " + id;
+            throw new ValidationDataException(msg, e);
+        }
     }
 
     @GetMapping("/facturas/{id}")

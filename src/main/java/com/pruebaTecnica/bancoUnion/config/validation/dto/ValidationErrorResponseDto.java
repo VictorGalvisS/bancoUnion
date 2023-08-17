@@ -1,6 +1,4 @@
-package com.pruebaTecnica.bancoUnion.web.validation.dto;
-
-import com.pruebaTecnica.bancoUnion.web.validation.dto.ValidationErrorDto;
+package com.pruebaTecnica.bancoUnion.config.validation.dto;
 
 import java.util.ArrayList;
 import java.util.List;
