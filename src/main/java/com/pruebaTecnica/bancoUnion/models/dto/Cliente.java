@@ -35,6 +35,7 @@ public class Cliente implements Serializable {
 	private final String email;
 
 	@Parameter(required=false)
+	@Schema(accessMode = Schema.AccessMode.READ_ONLY)
 	private final Date fechaRegistro;
 
 
