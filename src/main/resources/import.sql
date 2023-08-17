@@ -60,7 +60,15 @@ INSERT INTO facturas_items (cantidad, factura_id ,producto_id) VALUES (1,4,5);
 INSERT INTO facturas_items (cantidad, factura_id ,producto_id) VALUES (1,4,7);
 
 
-
+/** tabla log de esquema de logs
+CREATE TABLE `LOG4J2_APP_LOG` (
+  `log_date` varchar(255) NOT NULL,
+  `log_class` varchar(255) DEFAULT NULL,
+  `log_level` varchar(255) DEFAULT NULL,
+  `log_msg` varchar(255) DEFAULT NULL,
+  `log_custom` varchar(4000) DEFAULT NULL
+);
+ */
 
 
 
