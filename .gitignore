@@ -31,3 +31,8 @@ build/
 
 ### VS Code ###
 .vscode/
+.mvn
+logs/
+logs/*
+logs/output.log
+logs/output-dev.log

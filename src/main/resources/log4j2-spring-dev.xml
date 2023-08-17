@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="trace">
+    <Appenders>
+        <Console name="Console" target="SYSTEM_OUT">
+            <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss,nnnnnnnnn} %K{custom_msg}%n"/>
+        </Console>
+        <File name="File" fileName="logs/output-dev.log" bufferedIO="false">
+            <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss,nnnnnnnnn} %m%n"/>
+        </File>
+        <JDBC name="jdbcappender" tableName="LOG4J2_APP_LOG">
+            <ConnectionFactory
+                    class="com.pruebaTecnica.bancoUnion.config.logger.ConnectionFactory"
+                    method="getDatabaseConnection" />
+            <Column name="log_date" isEventTimestamp="true"/>
+            <Column name="log_class" pattern="%logger"/>
+            <Column name="log_level" pattern="%level"/>
+            <Column name="log_msg" pattern="%m"/>
+            <Column name="log_custom" pattern="%xThrowable(separator(|))" />
+        </JDBC>
+    </Appenders>
+    <Loggers>
+        <Logger name="com.pruebaTecnica.bancoUnion" additivity="false" level="trace">
+            <AppenderRef ref="Console"/>
+            <AppenderRef ref="File"/>
+            <AppenderRef ref="jdbcappender"/>
+        </Logger>
+
+        <Root level="warn">
+            <AppenderRef ref="Console"/>
+            <AppenderRef ref="File"/>
+            <AppenderRef ref="jdbcappender"/>
+        </Root>
+    </Loggers>
+</Configuration>
