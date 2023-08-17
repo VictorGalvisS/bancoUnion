@@ -1,6 +1,10 @@
 package com.pruebaTecnica.bancoUnion.models.dto;
 
+import com.pruebaTecnica.bancoUnion.models.entities.ItemFacturaEntity;
+
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ItemFactura implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -34,5 +38,15 @@ public class ItemFactura implements Serializable {
                 ", cantidad=" + cantidad +
                 ", producto=" + producto +
                 '}';
+    }
+
+    public static List<ItemFactura> fromListToDomainModel(List<ItemFacturaEntity> listItemFacturas) {
+        return new ArrayList<ItemFactura>() {{
+            for (ItemFacturaEntity fc : listItemFacturas) {
+                if(fc != null) {
+                    this.add(fc.toDomainModel());
+                }
+            }
+        }};
     }
 }
